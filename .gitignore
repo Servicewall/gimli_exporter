@@ -1,0 +1,12 @@
+*.DS_Store
+.vscode
+__debug_bin
+.idea
+.history
+*.docker.txz
+*.tar
+*.tar.gz
+tmp/*
+build/
+__debug_bin*
+gimli_exporter
