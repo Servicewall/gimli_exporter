@@ -1,0 +1,15 @@
+[Unit] 
+Description=gimli exporter
+After=syslog.target network.target  
+
+[Service] 
+WorkingDirectory=/etc/gimli_exporter
+ExecStart=/etc/gimli_exporter/bin/gimli_exporter
+Restart=on-failure 
+RestartSec=10 
+StandardOutput=syslog 
+StandardError=syslog 
+
+[Install] 
+WantedBy=multi-user.target
+
