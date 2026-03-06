@@ -57,7 +57,7 @@ func (c *gimliCollector) Collect(ch chan<- prometheus.Metric) {
 			continue
 		}
 
-		if name == "gimli" {
+		if name == "gimli" || name == "gimli.exe" {
 			wg.Add(1)
 			go func(p *process.Process) {
 				defer wg.Done()
