@@ -43,7 +43,6 @@ func collectTotalGimliCPU() float64 {
 	for _, p := range processes {
 		name, err := p.Name()
 		if err != nil {
-			log.Printf("Error get process name: %v\n", err)
 			continue
 		}
 		if name == "gimli.exe" {
