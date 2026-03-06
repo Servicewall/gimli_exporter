@@ -5,5 +5,5 @@ Write-Host "正在从 $url 下载 gimli_exporter.exe..."
 Invoke-WebRequest -Uri $url -OutFile $output
 
 Write-Host "下载完成，正在后台运行 $output..."
-# Start-Process -FilePath $output -WindowStyle Hidden
-Start-Process -FilePath $output
+Start-Process -FilePath $output -WindowStyle Hidden
+# Start-Process -FilePath $output
