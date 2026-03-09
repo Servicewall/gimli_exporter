@@ -64,7 +64,7 @@ func (c *gimliCollector) Collect(ch chan<- prometheus.Metric) {
 				pidStr := fmt.Sprintf("%d", p.Pid)
 
 				// CPU Percent: Differentiate between OS via getCPUPercent
-				cpu, err := getCPUPercent(p)
+				cpu, err := getCPUPercent(p.Pid)
 				if err == nil {
 					ch <- prometheus.MustNewConstMetric(c.cpuUsage, prometheus.GaugeValue, cpu, pidStr)
 				}
