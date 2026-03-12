@@ -1,10 +1,10 @@
 [Unit] 
-Description=gimli exporter
+Description=probe exporter
 After=syslog.target network.target  
 
 [Service] 
-WorkingDirectory=/etc/gimli_exporter
-ExecStart=/etc/gimli_exporter/bin/gimli_exporter
+WorkingDirectory=/etc/probe_exporter
+ExecStart=/etc/probe_exporter/bin/probe_exporter
 Restart=on-failure 
 RestartSec=10 
 StandardOutput=syslog 

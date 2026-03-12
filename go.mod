@@ -1,4 +1,4 @@
-module gimli_exporter
+module probe_exporter
 
 go 1.26.0
 
