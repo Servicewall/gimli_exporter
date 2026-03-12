@@ -17,7 +17,7 @@ var (
 func init() {
 	go func() {
 		updateGimliCpuUsage()
-		ticker := time.NewTicker(5 * time.Second)
+		ticker := time.NewTicker(10 * time.Second)
 		for range ticker.C {
 			updateGimliCpuUsage()
 		}
@@ -44,7 +44,9 @@ func updateGimliCpuUsage() {
 					log.Printf("Error get gimli(%d) process percent: %v\n", p.Pid, err)
 					return
 				}
-				gimliProcCpuUsageMap.Store(p.Pid, percent)
+				if percent > 0 {
+					gimliProcCpuUsageMap.Store(p.Pid, percent)
+				}
 			}()
 		case "gimli.exe":
 			// windows 探针，cpu 使用率需要除以cpu核数
@@ -54,7 +56,9 @@ func updateGimliCpuUsage() {
 					log.Printf("Error get gimli(%d) process percent: %v\n", p.Pid, err)
 					return
 				}
-				gimliProcCpuUsageMap.Store(p.Pid, (percent / float64(runtime.NumCPU())))
+				if percent > 0 {
+					gimliProcCpuUsageMap.Store(p.Pid, (percent / float64(runtime.NumCPU())))
+				}
 			}()
 		}
 	}
