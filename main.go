@@ -8,6 +8,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/shirou/gopsutil/v3/load"
 	"github.com/shirou/gopsutil/v3/process"
 )
 
@@ -15,6 +16,9 @@ type gimliCollector struct {
 	cpuUsage    *prometheus.Desc
 	memoryUsage *prometheus.Desc
 	netConns    *prometheus.Desc
+	hostLoad1   *prometheus.Desc
+	hostLoad5   *prometheus.Desc
+	hostLoad15  *prometheus.Desc
 }
 
 func newGimliCollector() *gimliCollector {
@@ -34,6 +38,21 @@ func newGimliCollector() *gimliCollector {
 			"Total number of network connections of the gimli process",
 			[]string{"pid"}, nil,
 		),
+		hostLoad1: prometheus.NewDesc(
+			"gimli_host_load1",
+			"1-minute load average of the host",
+			nil, nil,
+		),
+		hostLoad5: prometheus.NewDesc(
+			"gimli_host_load5",
+			"5-minute load average of the host",
+			nil, nil,
+		),
+		hostLoad15: prometheus.NewDesc(
+			"gimli_host_load15",
+			"15-minute load average of the host",
+			nil, nil,
+		),
 	}
 }
 
@@ -41,9 +60,19 @@ func (c *gimliCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.cpuUsage
 	ch <- c.memoryUsage
 	ch <- c.netConns
+	ch <- c.hostLoad1
+	ch <- c.hostLoad5
+	ch <- c.hostLoad15
 }
 
 func (c *gimliCollector) Collect(ch chan<- prometheus.Metric) {
+	avg, err := load.Avg()
+	if err == nil {
+		ch <- prometheus.MustNewConstMetric(c.hostLoad1, prometheus.GaugeValue, avg.Load1)
+		ch <- prometheus.MustNewConstMetric(c.hostLoad5, prometheus.GaugeValue, avg.Load5)
+		ch <- prometheus.MustNewConstMetric(c.hostLoad15, prometheus.GaugeValue, avg.Load15)
+	}
+
 	processes, err := process.Processes()
 	if err != nil {
 		log.Printf("Error fetching processes: %v", err)
